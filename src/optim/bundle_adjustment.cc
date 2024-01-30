@@ -302,7 +302,10 @@ bool BundleAdjuster::Solve(Reconstruction* reconstruction) {
 
   std::string solver_error;
   CHECK(solver_options.IsValid(&solver_error)) << solver_error;
-
+  solver_options.dense_linear_algebra_library_type=ceres::CUDA;
+  solver_options.linear_solver_type=ceres::CGNR;
+  solver_options.preconditioner_type=ceres::JACOBI;
+  solver_options.sparse_linear_algebra_library_type=ceres::CUDA_SPARSE;
   ceres::Solve(solver_options, problem_.get(), &summary_);
 
   if (solver_options.minimizer_progress_to_stdout) {
